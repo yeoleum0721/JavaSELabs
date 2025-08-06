@@ -1,5 +1,9 @@
 package workshop.account.entity;
 
+import javax.naming.InsufficientResourcesException;
+
+import workshop.account.exception.InsufficientBalanceException;
+
 public class Account {
 	private String custId;
 	private String acctId;
@@ -46,8 +50,16 @@ public class Account {
 		this.balance += amount;
 	}
 	//withdraw
-	public void withdraw(int amount) {
+	public void withdraw(int amount) throws InsufficientBalanceException{
+		//잔액 부족
+		if(amount > this.balance) {
+			String errMessage = String.format("잔액이 부족합니다. (요청 금액: %d, 현재 잔액: %d)", amount, balance);
+			// Exception 강제로 발생시킴
+			throw new InsufficientBalanceException(errMessage);
+			
+		}
 		this.balance -= amount;
+		
 	}
 
 }
